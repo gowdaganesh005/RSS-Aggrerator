@@ -40,7 +40,8 @@ func main() {
 	// A Sub router for  v1 route
 	v1router := chi.NewRouter()
 	v1router.Get("/healthz", handler_readiness) // handler functions(handler_readiness) for GET http method
-	router.Mount("/v1", v1router)               // mounting over root router
+	v1router.Get("/err", errhandler_readiness)
+	router.Mount("/v1", v1router) // mounting over root router
 
 	// determines the behaviour of the httpp server
 	//[1(4)]
