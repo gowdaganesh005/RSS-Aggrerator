@@ -12,15 +12,18 @@ import (
 )
 
 func main() {
+	// load environment variable mentioned in .env file or present in environment
 	godotenv.Load()
 
+	// get port from enviornment variables *PORT [1(1)] refer in main_docs.md
 	portString := os.Getenv("PORT")
-
+	//if not set return with error
 	if portString == "" {
 		log.Fatal("port is not found in the environment")
 	}
 	fmt.Println("PORT =", portString)
 
+	//a new chi router  Router [1(2)]
 	router := chi.NewRouter()
 
 	router.Use(cors.Handler(cors.Options{
@@ -33,15 +36,21 @@ func main() {
 		AllowCredentials: false,
 		MaxAge:           300, // Maximum value not ignored by any of major browsers
 	}))
-	v1router := chi.NewRouter()
-	v1router.Get("/healthz", handler_readiness)
-	router.Mount("/v1", v1router)
 
+	// A Sub router for  v1 route
+	v1router := chi.NewRouter()
+	v1router.Get("/healthz", handler_readiness) // handler functions(handler_readiness) for GET http method
+	router.Mount("/v1", v1router)               // mounting over root router
+
+	// determines the behaviour of the httpp server
+	//[1(4)]
 	srv := &http.Server{
 		Handler: router,
 		Addr:    ":" + portString,
 	}
 	fmt.Printf("Server starting on port %v", portString)
+
+	//err := srv.ListenAndServe(): Starts the HTTP server and logs any errors. The server will listen for incoming requests on the specified port
 	err := srv.ListenAndServe()
 	if err != nil {
 		log.Fatal(err)
