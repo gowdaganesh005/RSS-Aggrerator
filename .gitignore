@@ -1,3 +1,4 @@
 .env
 vendor/github.com
+vendor/golang.org
 theory.md

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
@@ -8,8 +9,14 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
+	"github.com/gowdaganesh005/RSS-Aggregator/internal/database"
 	"github.com/joho/godotenv"
+	_ "github.com/ncruces/go-sqlite3"
 )
+
+type apiConfig struct {
+	DB *database.Queries
+}
 
 func main() {
 	// load environment variable mentioned in .env file or present in environment
@@ -22,6 +29,21 @@ func main() {
 		log.Fatal("port is not found in the environment")
 	}
 	fmt.Println("PORT =", portString)
+
+	dburl := os.Getenv("DB_URL")
+	//if not set return with error
+	if dburl == "" {
+		log.Fatal("database is not found in the environment")
+	}
+
+	conn, err1 := sql.Open("sqlite3", dburl)
+	if err1 != nil {
+		log.Printf("Could not connect to database:%v", err1)
+		return
+	}
+	apicn := apiConfig{
+		DB: database.New(conn),
+	}
 
 	//a new chi router  Router [1(2)]
 	router := chi.NewRouter()
@@ -41,6 +63,7 @@ func main() {
 	v1router := chi.NewRouter()
 	v1router.Get("/healthz", handler_readiness) // handler functions(handler_readiness) for GET http method
 	v1router.Get("/err", errhandler_readiness)
+	v1router.Post("/users", apicn.User_creating_handler)
 	router.Mount("/v1", v1router) // mounting over root router
 
 	// determines the behaviour of the httpp server
