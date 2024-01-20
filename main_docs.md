@@ -44,3 +44,12 @@ HTTP Methods:
         Addr is another field of the http.Server struct, and it specifies the network address the server should listen on. It's typically in the form host:port.
 
         ":" + portString constructs the full network address by concatenating a colon (:) and the portString retrieved from the environment variables. For example, if the port is "8080," the address becomes ":8080," indicating that the server should listen on port 8080.
+
+
+
+[Database]
+
+[2(1)] [Goose] -  Goose is a popular tool for DB migrations in Go. It simplifies the process of creating and managing database schema changes by providing a structured way to define migration scripts.
+In Goose, DB migrations are a process of updating the database schema by creating new tables, modifying existing ones, or dropping them. Migrations are necessary because they help ensure that the database schema is consistent with the application's codebase, and they provide a way to track changes made to the database structure over time.
+
+[2(1)] [2(2)]  The `up` migration creates new tables or modifies existing ones in the database, while the `down` migration reverses those changes, restoring the database to a previous state. Keeping both `up` and `down` migrations is necessary because it allows for easy rollback of changes in case something goes wrong during deployment or if the application's requirements change.

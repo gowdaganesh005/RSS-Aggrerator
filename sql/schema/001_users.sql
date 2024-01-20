@@ -1,5 +1,6 @@
 -- +goose Up
-Create Table users( 
+                          -- [2(1)]
+Create Table users(      
     id TEXT PRIMARY KEY,
     created_at timestamp not null,
     updated_at timestamp not null,
@@ -8,4 +9,5 @@ Create Table users(
 );
 
 -- +goose Down
-DROP TABLE users;
+                        --[2(2)]
+DROP TABLE users;       

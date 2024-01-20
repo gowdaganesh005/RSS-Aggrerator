@@ -30,5 +30,5 @@ func (apicn *apiConfig) User_creating_handler(w http.ResponseWriter, r *http.Req
 	if err1 != nil {
 		Err_Response(w, 400, fmt.Sprintf("could not create user: %v", err1))
 	}
-	JSON_Response(w, 200, user)
+	JSON_Response(w, 200, dbusertouser(user))
 }
