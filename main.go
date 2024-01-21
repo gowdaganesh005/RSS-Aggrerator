@@ -14,7 +14,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-// here we are craeting a struct to link db and we are using sqlite3 as our database
+// here we are craeting a struct to link the db and we are using sqlite3 as our database
 type apiConfig struct {
 	DB *database.Queries
 }
