@@ -13,7 +13,7 @@ import (
 const createuser = `-- name: Createuser :one
 INSERT INTO users (id , created_at, updated_at, name,api_key)
 VALUES (?,?,?,?,
-encode(hex(randomblob(32)))
+lower(hex(randomblob(32)))
 )
 RETURNING id, created_at, updated_at, name, api_key
 `
@@ -32,6 +32,23 @@ func (q *Queries) Createuser(ctx context.Context, arg CreateuserParams) (User, e
 		arg.UpdatedAt,
 		arg.Name,
 	)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Name,
+		&i.ApiKey,
+	)
+	return i, err
+}
+
+const getUserByAPI = `-- name: GetUserByAPI :one
+SELECT id, created_at, updated_at, name, api_key FROM users WHERE api_key=?
+`
+
+func (q *Queries) GetUserByAPI(ctx context.Context, apiKey string) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUserByAPI, apiKey)
 	var i User
 	err := row.Scan(
 		&i.ID,

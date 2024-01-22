@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/gowdaganesh005/RSS-Aggregator/internal/auth"
 	"github.com/gowdaganesh005/RSS-Aggregator/internal/database"
 )
 
@@ -29,6 +30,18 @@ func (apicn *apiConfig) User_creating_handler(w http.ResponseWriter, r *http.Req
 	})
 	if err1 != nil {
 		Err_Response(w, 400, fmt.Sprintf("could not create user: %v", err1))
+	}
+	JSON_Response(w, 201, dbusertouser(user))
+}
+
+func (apicn *apiConfig) GetUserByAPI(w http.ResponseWriter, r *http.Request) { //[2(1)]
+	apikey, err := auth.GetAPIKey(r.Header)
+	if err != nil {
+		Err_Response(w, 403, fmt.Sprintf("authorization failed and error:%v", err))
+	}
+	user, err := apicn.DB.GetUserByAPI(r.Context(), apikey)
+	if err != nil {
+		Err_Response(w, 400, fmt.Sprintf("could not get user %v", err))
 	}
 	JSON_Response(w, 200, dbusertouser(user))
 }
