@@ -25,3 +25,21 @@ func dbusertouser(dbuser database.User) User {
 	}
 
 }
+func dbfeedtofeed(dbfeed database.Feed) Feed {
+	return Feed{
+		ID:        dbfeed.ID,
+		CreatedAt: dbfeed.CreatedAt,
+		UpdatedAt: dbfeed.UpdatedAt,
+		Name:      dbfeed.Name,
+		Url:       dbfeed.Url,
+		UserID:    dbfeed.UserID,
+	}
+}
+
+func dbfeedstofeeds(dbfeeds []database.Feed) []Feed {
+	feeds := []Feed{}
+	for _, dbfeed := range dbfeeds {
+		feeds = append(feeds, dbfeedtofeed(dbfeed))
+	}
+	return feeds
+}

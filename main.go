@@ -65,7 +65,9 @@ func main() {
 	v1router.Get("/healthz", handler_readiness) // handler functions(handler_readiness) for GET http method
 	v1router.Get("/err", errhandler_readiness)
 	v1router.Post("/users", apicn.User_creating_handler)
-	v1router.Get("/users", apicn.GetUserByAPI)
+	v1router.Get("/users", apicn.middlewareauth(apicn.GetUserByAPI))
+	v1router.Post("/feeds", apicn.middlewareauth(apicn.feeds_handler))
+	v1router.Get("/feeds", apicn.Get_feeds_handler)
 	router.Mount("/v1", v1router) // mounting over root router
 
 	// determines the behaviour of the httpp server

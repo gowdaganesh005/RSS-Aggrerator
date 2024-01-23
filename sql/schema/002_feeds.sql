@@ -6,7 +6,7 @@ Create Table feeds (
     updated_at timestamp not null,
     name text not null,
     url TEXT unique not null,
-    user_id text references users(id) ON  DELETE CASCADE
+    user_id  text not null references users(id) ON  DELETE CASCADE
 
 );
 
