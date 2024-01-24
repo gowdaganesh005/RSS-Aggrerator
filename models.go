@@ -43,3 +43,21 @@ func dbfeedstofeeds(dbfeeds []database.Feed) []Feed {
 	}
 	return feeds
 }
+
+func dbfeedfollowtofeedfollow(dbfeedfollow database.FeedsFollow) FeedFollows {
+	return FeedFollows{
+		ID:        dbfeedfollow.ID,
+		CreatedAt: dbfeedfollow.CreatedAt,
+		UpdatedAt: dbfeedfollow.UpdatedAt,
+
+		UserID: dbfeedfollow.UserID,
+		FeedID: dbfeedfollow.FeedID,
+	}
+}
+func dbfeedsfollowstofeedsfollows(dbfeedfollows []database.FeedsFollow) []FeedFollows {
+	feedsfollow := []FeedFollows{}
+	for _, dbfeedfollow := range dbfeedfollows {
+		feedsfollow = append(feedsfollow, dbfeedfollowtofeedfollow(dbfeedfollow))
+	}
+	return feedsfollow
+}

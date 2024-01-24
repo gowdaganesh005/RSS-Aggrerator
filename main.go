@@ -68,6 +68,8 @@ func main() {
 	v1router.Get("/users", apicn.middlewareauth(apicn.GetUserByAPI))
 	v1router.Post("/feeds", apicn.middlewareauth(apicn.feeds_handler))
 	v1router.Get("/feeds", apicn.Get_feeds_handler)
+	v1router.Post("/feed_follow", apicn.middlewareauth(apicn.feeds_follow_handler))
+	v1router.Get("/feed_follow", apicn.middlewareauth(apicn.Get_feeds_follow_handler))
 	router.Mount("/v1", v1router) // mounting over root router
 
 	// determines the behaviour of the httpp server
