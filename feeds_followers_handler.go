@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 	"github.com/gowdaganesh005/RSS-Aggregator/internal/database"
 )
@@ -50,4 +51,17 @@ func (apicn *apiConfig) Get_feeds_follow_handler(w http.ResponseWriter, r *http.
 		return
 	}
 	JSON_Response(w, 201, dbfeedsfollowstofeedsfollows(feed_follow))
+}
+func (apicn *apiConfig) Delete_feeds_follow_handler(w http.ResponseWriter, r *http.Request, user database.User) { //[2(1)]
+	feedfollowIDstr := chi.URLParam(r, "feedfollowID")
+
+	err := apicn.DB.Deletefeedfollow(r.Context(), database.DeletefeedfollowParams{
+		ID:     feedfollowIDstr,
+		UserID: user.ID,
+	})
+	if err != nil {
+		Err_Response(w, 400, fmt.Sprintf("Could not delete the feed follow:%v", err))
+	}
+	JSON_Response(w, 200, struct{}{})
+
 }
