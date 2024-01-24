@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
@@ -20,6 +21,7 @@ type apiConfig struct {
 }
 
 func main() {
+
 	// load environment variable mentioned in .env file or present in environment
 	godotenv.Load()
 
@@ -42,9 +44,13 @@ func main() {
 		log.Printf("Could not connect to database:%v", err1)
 		return
 	}
+	db := database.New(conn)
 	apicn := apiConfig{
-		DB: database.New(conn),
+
+		DB: db,
 	}
+
+	go startscraping(db, 10, time.Minute)
 
 	//a new chi router  Router [1(2)]
 	router := chi.NewRouter()
