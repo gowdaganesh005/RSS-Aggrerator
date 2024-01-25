@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -36,4 +37,16 @@ func (apicn *apiConfig) User_creating_handler(w http.ResponseWriter, r *http.Req
 func (apicn *apiConfig) GetUserByAPI(w http.ResponseWriter, r *http.Request, user database.User) { //[2(1)]
 
 	JSON_Response(w, 200, dbusertouser(user))
+}
+
+func (apicn *apiConfig) user_post_handler(w http.ResponseWriter, r *http.Request, user database.User) { //[2(1)]
+	posts, err := apicn.DB.GetpostsForUser(r.Context(), database.GetpostsForUserParams{
+		UserID: user.ID,
+		Limit:  10,
+	})
+	if err != nil {
+		log.Println("Could not get posts for the user: ", err)
+	}
+	JSON_Response(w, 200, dbpoststoposts(posts))
+
 }

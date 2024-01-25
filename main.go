@@ -73,6 +73,7 @@ func main() {
 
 	v1router.Post("/users", apicn.User_creating_handler)
 	v1router.Get("/users", apicn.middlewareauth(apicn.GetUserByAPI))
+	v1router.Get("/users_posts", apicn.middlewareauth(apicn.user_post_handler))
 
 	v1router.Post("/feeds", apicn.middlewareauth(apicn.feeds_handler))
 	v1router.Get("/feeds", apicn.Get_feeds_handler)
